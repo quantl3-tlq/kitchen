@@ -3,207 +3,293 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mom_Food - Đặt Món Online</title>
+    <title>Tiệm Ăn Online - Thực Đơn 18 Món Đa Dạng</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .cart-modal { display: none; }
-        .cart-modal.active { display: flex; }
+        .cart-sidebar { transform: translateX(100%); transition: 0.3s; }
+        .cart-sidebar.active { transform: translateX(0); }
+        .modal { display: none; }
+        .modal.active { display: flex; }
     </style>
 </head>
-<body class="bg-slate-50 font-sans text-slate-900">
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
 
-    <header class="bg-red-600 text-white shadow-lg sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold italic">Mom-kitchen 🍕</h1>
-            <button onclick="toggleCart()" class="bg-white text-red-600 px-5 py-2 rounded-full font-bold shadow-md hover:bg-red-50 transition">
+    <header class="bg-orange-500 text-white p-4 sticky top-0 z-50 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold cursor-pointer" onclick="resetMenu()">Yummy Food 🍕</h1>
+            <button onclick="toggleCart()" class="bg-white text-orange-600 px-4 py-2 rounded-full font-bold shadow hover:bg-gray-100 transition">
                 Giỏ hàng (<span id="cart-count">0</span>)
             </button>
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-10">
-        <h2 class="text-3xl font-extrabold text-center mb-10 text-slate-800">Thực Đơn Đặc Sắc</h2>
+    <main class="container mx-auto py-8 px-4 flex-grow">
+        <h2 class="text-3xl font-bold text-center mb-6">Thực Đơn Hôm Nay</h2>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-xl transition-shadow">
-                <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=500" class="h-52 w-full object-cover" alt="Burger">
-                <div class="p-5">
-                    <h3 class="text-xl font-bold">Burger Bò Phô Mai</h3>
-                    <p class="text-slate-500 text-sm mt-2">Bò nướng than, phô mai Cheddar, rau xà lách tươi.</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <span class="text-lg font-bold text-red-600">55.000đ</span>
-                        <button onclick="addToCart('Burger Bò', 55000)" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Thêm vào giỏ</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-xl transition-shadow">
-                <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=500" class="h-52 w-full object-cover" alt="Pizza">
-                <div class="p-5">
-                    <h3 class="text-xl font-bold">Pizza Hải Sản Sốt BBQ</h3>
-                    <p class="text-slate-500 text-sm mt-2">Tôm, mực, thanh cua hòa quyện sốt BBQ đậm đà.</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <span class="text-lg font-bold text-red-600">120.000đ</span>
-                        <button onclick="addToCart('Pizza Hải Sản', 120000)" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Thêm vào giỏ</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-xl transition-shadow">
-                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=500" class="h-52 w-full object-cover" alt="Salad">
-                <div class="p-5">
-                    <h3 class="text-xl font-bold">Salad Ức Gà Áp Chảo</h3>
-                    <p class="text-slate-500 text-sm mt-2">Món ăn lành mạnh với ức gà, bơ và hạt dinh dưỡng.</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <span class="text-lg font-bold text-red-600">65.000đ</span>
-                        <button onclick="addToCart('Salad Ức Gà', 65000)" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Thêm vào giỏ</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-xl transition-shadow">
-                <img src="https://images.unsplash.com/photo-1525351484163-7529414344d8?q=80&w=500" class="h-52 w-full object-cover" alt="Mì Ý">
-                <div class="p-5">
-                    <h3 class="text-xl font-bold">Mì Ý Carbonara</h3>
-                    <p class="text-slate-500 text-sm mt-2">Sốt kem béo ngậy cùng thịt xông khói và trứng.</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <span class="text-lg font-bold text-red-600">85.000đ</span>
-                        <button onclick="addToCart('Mì Ý Carbonara', 85000)" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Thêm vào giỏ</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-xl transition-shadow">
-                <img src="garan.jpg?q=80&w=500" class="h-52 w-full object-cover" alt="Gà rán">
-                <div class="p-5">
-                    <h3 class="text-xl font-bold">Combo Gà Rán Giòn</h3>
-                    <p class="text-slate-500 text-sm mt-2">2 miếng gà rán da giòn kèm khoai tây chiên.</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <span class="text-lg font-bold text-red-600">45.000đ</span>
-                        <button onclick="addToCart('Combo Gà Rán', 45000)" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Thêm vào giỏ</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-xl transition-shadow">
-                <img src="https://images.unsplash.com/photo-1571934811356-5cc061b6821f?q=80&w=500" class="h-52 w-full object-cover" alt="Trà sữa">
-                <div class="p-5">
-                    <h3 class="text-xl font-bold">Trà Sữa Trân Châu</h3>
-                    <p class="text-slate-500 text-sm mt-2">Trà sữa truyền thống đậm vị kèm trân châu đen.</p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <span class="text-lg font-bold text-red-600">35.000đ</span>
-                        <button onclick="addToCart('Trà Sữa', 35000)" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">Thêm vào giỏ</button>
-                    </div>
+        <div class="max-w-md mx-auto mb-10">
+            <div class="relative">
+                <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Nhập tên món ăn cần tìm..." 
+                       class="w-full p-4 pl-10 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-orange-500 shadow-sm">
+                <div class="absolute left-3 top-4 text-gray-400">
+                    🔍
                 </div>
             </div>
         </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="menu">
+            </div>
+
+        <div class="flex justify-center items-center gap-2 mt-12" id="pagination">
+            </div>
     </main>
 
-    <div id="cartModal" class="cart-modal fixed inset-0 bg-slate-900/60 z-[60] items-center justify-center p-4">
-        <div class="bg-white w-full max-w-lg rounded-2xl p-8 shadow-2xl overflow-y-auto max-h-[90vh]">
-            <h2 class="text-2xl font-bold mb-6 flex justify-between items-center">
-                Xác nhận đặt hàng
-                <button onclick="toggleCart()" class="text-slate-400 hover:text-slate-600">✕</button>
-            </h2>
-            
-            <div id="cart-list" class="space-y-4 mb-6 border-b pb-6">
-                </div>
+    <div id="cartSidebar" class="cart-sidebar fixed top-0 right-0 w-full max-w-md h-full bg-white shadow-2xl z-50 p-6 overflow-y-auto">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold">Đơn hàng của bạn</h2>
+            <button onclick="toggleCart()" class="text-2xl hover:text-red-500">✕</button>
+        </div>
+        
+        <div id="cart-items" class="space-y-4 mb-6"></div>
 
-            <div class="flex justify-between items-center text-xl font-bold mb-8">
+        <div class="border-t pt-4">
+            <div class="flex justify-between text-xl font-bold mb-6">
                 <span>Tổng cộng:</span>
                 <span id="total-price" class="text-red-600">0đ</span>
             </div>
 
-            <form id="order-form" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium mb-1">Họ tên khách hàng</label>
-                    <input type="text" id="form-name" required class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-red-500 outline-none" placeholder="Nguyễn Văn A">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Số điện thoại</label>
-                    <input type="tel" id="form-phone" required class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-red-500 outline-none" placeholder="090...">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Địa chỉ giao hàng</label>
-                    <textarea id="form-address" required class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-red-500 outline-none" placeholder="Số nhà, tên đường, quận..."></textarea>
-                </div>
-                <button type="submit" class="w-full bg-red-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-red-700 shadow-lg shadow-red-200 active:scale-95 transition">GỬI ĐƠN HÀNG</button>
-            </form>
+            <div class="bg-yellow-50 p-4 rounded-lg mb-6 text-sm border border-yellow-200">
+                <strong>Hướng dẫn mua hàng:</strong><br>
+                Bấm nút <span class="text-blue-600 font-semibold">"Tiến hành thanh toán"</span> để lấy thông tin đơn hàng và xem mã QR chuyển khoản của shop.
+            </div>
+
+            <button onclick="processOrder()" class="w-full bg-blue-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-blue-700 shadow transition">
+                Tiến hành thanh toán
+            </button>
         </div>
     </div>
 
-    <script>
-        let cart = [];
-        // THAY LINK FORM CỦA BẠN VÀO ĐÂY (Xem hướng dẫn Bước 3 bên dưới)
-        const FORM_URL = "https://forms.gle/QRLpzwPEUDEbUTuT6";
+    <div id="qrModal" class="modal fixed inset-0 bg-black bg-opacity-60 z-[60] items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl text-center relative">
+            <button onclick="toggleQRModal()" class="absolute top-4 right-4 text-xl text-gray-400 hover:text-gray-600">✕</button>
+            
+            <h3 class="text-xl font-bold text-gray-900 mb-1">Thanh Toán Đơn Hàng</h3>
+            <p id="modal-total" class="text-2xl font-extrabold text-red-600 mb-4">0đ</p>
+            
+            <div class="bg-white p-2 rounded-xl inline-block mb-4 border shadow-sm">
+                <img src="qr.png" alt="Mã QR Shop" class="w-60 h-60 mx-auto object-contain">
+            </div>
 
-        function addToCart(name, price) {
-            cart.push({ name, price });
-            updateUI();
+            <div class="bg-blue-50 text-blue-900 text-left p-3 rounded-xl text-sm mb-5 space-y-1 border border-blue-100">
+                <p>📌 <strong>Bước 1:</strong> Quét mã QR trên để thanh toán số tiền đơn hàng.</p>
+                <p>📌 <strong>Bước 2:</strong> Hệ thống đã tự động sao chép danh sách món ăn vào bộ nhớ tạm.</p>
+                <p>📌 <strong>Bước 3:</strong> Bấm nút xanh dưới để mở Form, dán (Paste) đơn hàng vào mục Nội dung.</p>
+            </div>
+            
+            <a href="https://forms.gle/iM2eHJZZiJt45PXD7" target="_blank" 
+               class="block w-full bg-green-600 text-white py-3.5 rounded-xl font-bold text-center hover:bg-green-700 shadow transition">
+                Mở Form xác nhận đơn hàng
+            </a>
+        </div>
+    </div>
+
+    <footer class="bg-gray-800 text-gray-400 text-center py-4 text-sm mt-auto">
+        &copy; 2026 Yummy Food. Toàn bộ bản quyền thuộc về shop.
+    </footer>
+
+    <script>
+        // Dữ liệu 18 món ăn hoàn chỉnh
+        const products = [
+            { id: 1, name: 'Pizza Hải Sản Cao Cấp', price: 129000, img: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400' },
+            { id: 2, name: 'Burger Bò Phô Mai Chảy', price: 55000, img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400' },
+            { id: 3, name: 'Mì Ý Sốt Bò Bằm', price: 79000, img: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=400' },
+            { id: 4, name: 'Salad Ức Gà Sốt Mè', price: 45000, img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400' },
+            { id: 5, name: 'Gà Rán Giòn Rụm KFC', price: 35000, img: 'https://images.unsplash.com/photo-1562601519-1974175389bb?w=400' },
+            { id: 6, name: 'Trà Sữa Trân Châu Đường Đen', price: 30000, img: 'https://images.unsplash.com/photo-1571934811356-5cc061b6821f?w=400' },
+            { id: 7, name: 'Pizza Thập Cẩm Đặc Biệt', price: 139000, img: 'https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=400' },
+            { id: 8, name: 'Burger Gà Giòn Cay', price: 49000, img: 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?w=400' },
+            { id: 9, name: 'Mì Ý Hải Sản Sốt Kem', price: 89000, img: 'https://images.unsplash.com/photo-1645112411341-6c4fd023714a?w=400' },
+            { id: 10, name: 'Salad Cá Hồi Áp Chảo', price: 69000, img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400' },
+            { id: 11, name: 'Cánh Gà Chiên Nước Mắm', price: 59000, img: 'https://images.unsplash.com/photo-1608039829572-78524f79c4c7?w=400' },
+            { id: 12, name: 'Hồng Trà Sữa Thạch Sương Sáo', price: 32000, img: 'https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=400' },
+            { id: 13, name: 'Pizza Thuần Chay Rau Củ', price: 119000, img: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400' },
+            { id: 14, name: 'Khoai Tây Chiên Lắc Phô Mai', price: 29000, img: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400' },
+            { id: 15, name: 'Bánh Tiramisu Truyền Thống', price: 39000, img: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400' },
+            { id: 16, name: 'Nước Ép Cam Nguyên Chất', price: 25000, img: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?w=400' },
+            { id: 17, name: 'Cơm Chiên Dương Châu', price: 45000, img: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=400' },
+            { id: 18, name: 'Bánh Mì Nướng Muối Ớt', price: 25000, img: 'https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=400' }
+        ];
+
+        // Quản lý trạng thái ứng dụng
+        let cart = [];
+        let filteredProducts = [...products];
+        let currentPage = 1;
+        const itemsPerPage = 6;
+
+        // Khởi chạy ứng dụng
+        function init() {
+            renderMenu();
+            renderPagination();
         }
 
-        function updateUI() {
+        // Render danh sách món ăn lên lưới dựa vào trang hiện tại và dữ liệu đã lọc
+        function renderMenu() {
+            const menuDiv = document.getElementById('menu');
+            
+            // Tính toán vị trí cắt mảng dữ liệu phục vụ phân trang
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageProducts = filteredProducts.slice(startIndex, endIndex);
+
+            if (pageProducts.length === 0) {
+                menuDiv.innerHTML = `<div class="col-span-full text-center py-10 text-gray-500 italic">Không tìm thấy món ăn nào phù hợp!</div>`;
+                return;
+            }
+
+            menuDiv.innerHTML = pageProducts.map(p => `
+                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition duration-200 flex flex-col h-full">
+                    <img src="${p.img}" class="w-full h-48 object-cover" alt="${p.name}">
+                    <div class="p-5 flex flex-col flex-grow">
+                        <h3 class="text-xl font-bold text-gray-900 line-clamp-1">${p.name}</h3>
+                        <p class="text-red-600 font-bold mt-2 text-lg">${p.price.toLocaleString('vi-VN')}đ</p>
+                        <button onclick="addToCart(${p.id})" class="w-full mt-auto bg-orange-500 text-white py-2 rounded-lg font-semibold hover:bg-orange-600 transition active:scale-95">Thêm vào giỏ</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Tạo giao diện các nút bấm phân trang tự động
+        function renderPagination() {
+            const paginationDiv = document.getElementById('pagination');
+            const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+            
+            if (totalPages <= 1) {
+                paginationDiv.innerHTML = '';
+                return;
+            }
+
+            let buttonsHTML = '';
+            
+            // Nút "Trở lại"
+            buttonsHTML += `<button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled class="px-3 py-1 bg-gray-200 text-gray-400 rounded-lg cursor-not-allowed"' : 'class="px-3 py-1 bg-white border rounded-lg hover:bg-orange-50 hover:text-orange-500"'}>&laquo;</button>`;
+
+            // Vòng lặp in ra số trang
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    buttonsHTML += `<button class="px-3 py-1 bg-orange-500 text-white font-bold rounded-lg">${i}</button>`;
+                } else {
+                    buttonsHTML += `<button onclick="changePage(${i})" class="px-3 py-1 bg-white border rounded-lg hover:bg-orange-50 hover:text-orange-500">${i}</button>`;
+                }
+            }
+
+            // Nút "Tiếp theo"
+            buttonsHTML += `<button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled class="px-3 py-1 bg-gray-200 text-gray-400 rounded-lg cursor-not-allowed"' : 'class="px-3 py-1 bg-white border rounded-lg hover:bg-orange-50 hover:text-orange-500"'}>&raquo;</button>`;
+
+            paginationDiv.innerHTML = buttonsHTML;
+        }
+
+        // Hàm chuyển trang
+        function changePage(page) {
+            currentPage = page;
+            renderMenu();
+            renderPagination();
+            // Tự động cuộn mượt lên đầu danh sách món ăn khi sang trang mới
+            window.scrollTo({ top: document.getElementById('menu').offsetTop - 100, behavior: 'smooth' });
+        }
+
+        // Hàm xử lý tìm kiếm khi người dùng nhập text
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            
+            // Lọc danh sách gốc theo từ khóa không dấu hoặc có dấu (hỗ trợ so sánh cơ bản)
+            filteredProducts = products.filter(p => p.name.toLowerCase().includes(query));
+            
+            currentPage = 1; // Đưa về trang 1 sau khi tìm kiếm
+            renderMenu();
+            renderPagination();
+        }
+
+        // Nhấp vào logo để làm mới lại toàn bộ thực đơn ban đầu
+        function resetMenu() {
+            document.getElementById('searchInput').value = '';
+            filteredProducts = [...products];
+            currentPage = 1;
+            renderMenu();
+            renderPagination();
+        }
+
+        // Thêm vào giỏ hàng
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            cart.push(product);
+            updateCart();
+        }
+
+        // Cập nhật giao diện giỏ hàng
+        function updateCart() {
             document.getElementById('cart-count').innerText = cart.length;
-            const cartList = document.getElementById('cart-list');
-            const totalDisplay = document.getElementById('total-price');
+            const cartItems = document.getElementById('cart-items');
             
             if (cart.length === 0) {
-                cartList.innerHTML = "<p class='text-slate-500 italic'>Giỏ hàng của bạn đang trống.</p>";
-            } else {
-                cartList.innerHTML = cart.map((item, index) => `
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <span class="font-semibold">${item.name}</span>
-                        </div>
-                        <div class="flex items-center gap-4">
-                            <span class="text-red-600">${item.price.toLocaleString()}đ</span>
-                            <button onclick="removeItem(${index})" class="text-xs bg-slate-100 px-2 py-1 rounded text-slate-500 hover:bg-red-50 hover:text-red-500">Xóa</button>
-                        </div>
-                    </div>
-                `).join('');
+                cartItems.innerHTML = `<p class="text-center text-gray-400 italic py-6">Giỏ hàng của bạn đang trống!</p>`;
+                document.getElementById('total-price').innerText = '0đ';
+                return;
             }
+
+            cartItems.innerHTML = cart.map((item, index) => `
+                <div class="flex justify-between items-center border-b pb-2">
+                    <div>
+                        <p class="font-bold text-gray-800">${item.name}</p>
+                        <p class="text-sm text-gray-500">${item.price.toLocaleString('vi-VN')}đ</p>
+                    </div>
+                    <button onclick="removeItem(${index})" class="text-red-500 hover:text-red-700 text-sm font-semibold">Xóa</button>
+                </div>
+            `).join('');
             
-            const total = cart.reduce((sum, item) => sum + item.price, 0);
-            totalDisplay.innerText = total.toLocaleString() + 'đ';
+            const total = cart.reduce((sum, p) => sum + p.price, 0);
+            document.getElementById('total-price').innerText = total.toLocaleString('vi-VN') + 'đ';
         }
 
         function removeItem(index) {
             cart.splice(index, 1);
-            updateUI();
+            updateCart();
         }
 
         function toggleCart() {
-            document.getElementById('cartModal').classList.toggle('active');
+            document.getElementById('cartSidebar').classList.toggle('active');
         }
 
-        document.getElementById('order-form').onsubmit = function(e) {
-            e.preventDefault();
-            if (cart.length === 0) return alert("Vui lòng chọn ít nhất 1 món!");
+        function toggleQRModal() {
+            document.getElementById('qrModal').classList.toggle('active');
+        }
 
-            const total = cart.reduce((sum, item) => sum + item.price, 0);
-            const orderDetails = cart.map(item => `${item.name} (${item.price.toLocaleString()}đ)`).join(", ");
+        // Xử lý nút Tiến Hành Thanh Toán
+        function processOrder() {
+            if (cart.length === 0) return alert("Giỏ hàng của bạn đang trống!");
+            const total = cart.reduce((sum, p) => sum + p.price, 0);
             
-            // Dữ liệu giả lập - Để kết nối thật bạn cần ID của từng entry trong Form
-            const formData = new FormData();
-            formData.append("entry.XXXXXXXXX", document.getElementById('form-name').value); // Thay entry ID
-            formData.append("entry.YYYYYYYYY", document.getElementById('form-phone').value); // Thay entry ID
-            formData.append("entry.ZZZZZZZZZ", document.getElementById('form-address').value); // Thay entry ID
-            formData.append("entry.AAAAAAAAA", orderDetails); // Thay entry ID
-            formData.append("entry.BBBBBBBBB", total.toLocaleString() + 'đ'); // Thay entry ID
+            // Gộp đếm số lượng từng món để chuỗi hiển thị gọn gàng
+            const itemCounts = {};
+            cart.forEach(p => { itemCounts[p.name] = (itemCounts[p.name] || 0) + 1; });
+            
+            let detailStr = '';
+            for (const [name, count] of Object.entries(itemCounts)) {
+                detailStr += `- ${name} (SL: ${count})\n`;
+            }
 
-            // Gửi dữ liệu đi bằng cơ chế No-CORS của Google Form
-            fetch(FORM_URL, {
-                method: "POST",
-                body: formData,
-                mode: "no-cors"
-            }).then(() => {
-                alert("Đơn hàng đã được gửi thành công! Chúng tôi sẽ gọi xác nhận sớm.");
-                cart = [];
-                updateUI();
+            const finalStr = `DANH SÁCH MÓN ĂN ĐẶT HÀNG:\n${detailStr}Tổng tiền cần thanh toán: ${total.toLocaleString('vi-VN')}đ`;
+            
+            // Tự động sao chép chuỗi đơn hàng vào Clipboard
+            navigator.clipboard.writeText(finalStr).then(() => {
+                document.getElementById('modal-total').innerText = total.toLocaleString('vi-VN') + 'đ';
                 toggleCart();
-                document.getElementById('order-form').reset();
-            }).catch(err => alert("Có lỗi xảy ra, vui lòng thử lại."));
-        };
+                toggleQRModal();
+            }).catch(() => {
+                alert("Không thể tự động copy, xin vui lòng kiểm tra lại quyền bộ nhớ tạm!");
+            });
+        }
+
+        // Chạy lần đầu tiên khi tải trang xong
+        init();
     </script>
 </body>
 </html>
